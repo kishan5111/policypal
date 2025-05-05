@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolicyPal</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <script> 
+        if (window.performance && window.performance.navigation.type === 1) {
+            window.location.href = "/";
+        }
+    </script>
+    <div class="header">
+        <h1>PolicyPal</h1>
+        <h2>Decode the fine print in seconds.</h2>
+        <p>Know what's behind the legal jargon in Privacy Policies, Terms &amp; Conditions, and more — before you click "Accept."</p>
+    </div>
+    <div class="container">
+        <form method="post" action="/summarize" id="summary-form">
+            <label for="url">T&C/Privacy Policy URL</label>
+            <input type="text" id="url" name="url" placeholder="Paste the T&C or Privacy Policy URL or text here..." required value="{{ url or '' }}">
+            <button type="submit">Summarize</button>
+        </form>
+        <div id="loading">
+            <div class="spinner"></div>
+            <span>Summarizing, please wait...</span>
+        </div>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        {% if summary %}
+            <div class="summary" id="summary"></div>
+            <script type="text/javascript">
+                // Hide loading indicator immediately
+                document.getElementById('loading').style.display = 'none';
+                
+                var summaryText = {{ summary|tojson|safe }};
+                var summaryDiv = document.getElementById('summary');
+                var i = 0;
+                var tempText = '';
+                console.log("Summary length:", summaryText.length);
+                function typeWriter() {
+                    if (i < summaryText.length) {
+                        tempText += summaryText.charAt(i);
+                        summaryDiv.innerHTML = marked.parse(tempText);
+                        i++;
+                        if (i % 100 === 0) console.log("Typed chars:", i);
+                        setTimeout(typeWriter, 1);
+                    } else {
+                        console.log("Typewriter finished");
+                        summaryDiv.innerHTML = marked.parse(summaryText);
+                    }
+                }
+                typeWriter();
+            </script>
+        {% endif %}
+    </div>
+    {% if error %}
+    <script>document.getElementById('loading').style.display = 'none';</script>
+    {% endif %}
+
+    <script>
+        // Show loading indicator when form is submitted
+        document.getElementById('summary-form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'flex';
+        });
+        
+        // Ensure loading indicator is hidden on page load
+        window.onload = function() {
+            document.getElementById('loading').style.display = 'none';
+        };
+    </script>
+</body>
+</html> 
