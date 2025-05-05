@@ -1,6 +1,6 @@
 # Policy Pal
 
-**Know what's behind terms and conditions before you agree.**
+**Know what's behind the legal jargon in Privacy Policies, Terms & Conditions, and more — before you click "Accept."**
 
 ![Demo](assets/tcsummarizer.gif)
 
@@ -21,12 +21,12 @@ Policy Pal is a web application that helps users understand lengthy terms and co
 
 1. Clone the repository:
    ```
-   git clone https://github.com/kishan5111/policy-pal.git
+   git clone https://github.com/kishan5111/policypal.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd policy-pal
+   cd policypal
    ```
 
 3. Install the required dependencies:
